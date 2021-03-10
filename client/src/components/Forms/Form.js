@@ -15,6 +15,7 @@ const Form =({ currentId, setCurrentId }) =>{
   
     const dispatch = useDispatch()
     const classes =  useStyles()
+
     useEffect(()=>{
         if(post){
             setPostData(post)
@@ -25,18 +26,21 @@ const Form =({ currentId, setCurrentId }) =>{
         e.preventDefault();
        if(currentId){
            dispatch(updatePost(currentId,postData))
+           clear()
        }else{
-        dispatch(createPost(postData))
+            dispatch(createPost(postData))
+            clear()
        }
     }
 
     const clear=()=>{
-
+        setCurrentId(null)
+        setPostData({creator:'',title:'',message:'',tags:'',selectedFile:''})
     }
     return(
         <Paper className={classes.paper}>
             <form autoComplete="off" noValidate className={classes.form} onSubmit={handleSubmit}>
-            <Typography variant="h6"> Creating  a memory</Typography>
+            <Typography variant="h6"> {currentId ? 'Editing' : 'Creating'}   a memory</Typography>
             <TextField name="creator" 
                 variant="outlined" 
                 label="Creator" 
