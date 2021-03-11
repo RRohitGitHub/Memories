@@ -6,13 +6,14 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
-import { deletePost } from '../../../actions/posts.js'
+import { deletePost, likePost } from '../../../actions/posts.js'
 
 
 const Post =({ post, setCurrentId }) =>{
     const classes = useStyles()
     const dispatch = useDispatch()
 
+    console.log(post.likeCount)
     return(
         <Card className={classes.card}>
             <img src={post.selectedFile} /> 
@@ -27,13 +28,14 @@ const Post =({ post, setCurrentId }) =>{
             </div>
                 <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
             <div className={classes.details}>
+                {`Inside Post tags ${post.tags}`}
                 <Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
             </div>
             <CardContent>
                 <Typography variant="h5" gutterBottom>{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button size="small" color="primary" onClick={()=>{}}>
+                <Button size="small" color="primary" onClick={()=> dispatch(likePost(post._id)) }>
                     <ThumbUpAltIcon fontSize="small" />
                     Like
                     {post.likeCount}
