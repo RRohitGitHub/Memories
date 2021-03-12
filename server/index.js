@@ -1,38 +1,23 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import Cors from 'cors'
-import postRoutes from './Routes/post.js'
+import express from 'express';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
-// Initialize app
-const app = express()
+import postRoutes from './Routes/posts.js';
 
-// General setup
-app.use(bodyParser.json({ limit: "30mb", extended:true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended:true }));
-app.use(Cors())
+const app = express();
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+app.use(bodyParser.json({ limit: '30mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
+app.use(cors());
 
-// Added prefix of /posts to the routes
-app.use('/posts',postRoutes)
+app.use('/posts', postRoutes);
 
-// MogoDB Atlas
-// Connect server with database
-const CONNECTION_URL = "mongodb+srv://rohitparab213:Jan@2021@cluster0.og2xw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const CONNECTION_URL = 'mongodb+srv://js_mastery:123123123@practice.jto9p.mongodb.net/test';
+const PORT = process.env.PORT|| 5000;
 
-//Create port for server
-const PORT = process.env.PORT || 5000;
+mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => app.listen(PORT, () => console.log(`Server Running on Port: http://localhost:${PORT}`)))
+  .catch((error) => console.log(`${error} did not connect`));
 
-// Use mongoose to connect to database
-// Returns a promise
-mongoose.connect(CONNECTION_URL,{ useNewUrlParser:true, useUnifiedTopology:true })
-    .then(()=>app.listen(PORT,() => console.log(`Server running on port : ${PORT}`)))
-    .catch((error)=> console.log(error.message))
-
-//Makes sure we do not get any warnings in the console 
-mongoose.set('useFindAndModify',false)
+mongoose.set('useFindAndModify', false);
